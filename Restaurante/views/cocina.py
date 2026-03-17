@@ -9,6 +9,8 @@ from Restaurante.views.shared import (
     ACCENT,
     ACCENT_HOVER,
     BORDER_COLOR,
+    SURFACE_GHOST,
+    SURFACE_MUTED,
     TEXT_MUTED,
     TEXT_PRIMARY,
     TEXT_SECONDARY,
@@ -26,7 +28,7 @@ def ticket_item(line: str) -> rx.Component:
         width="100%",
         padding="0.78rem 0.9rem",
         border_radius="16px",
-        style={"background": "rgba(255,255,255,0.05)"},
+        style={"background": SURFACE_GHOST},
         border=f"1px solid {BORDER_COLOR}",
         color=TEXT_SECONDARY,
         font_weight="600",
@@ -134,7 +136,7 @@ def empty_state(title: str, message: str) -> rx.Component:
         width="100%",
         padding="2.8rem 1.25rem",
         border_radius="24px",
-        style={"background": "rgba(255,255,255,0.03)"},
+        style={"background": SURFACE_MUTED},
         border=f"1px dashed {BORDER_COLOR}",
     )
 

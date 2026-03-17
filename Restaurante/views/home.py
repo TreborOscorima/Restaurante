@@ -34,8 +34,7 @@ def module_card(
                     border_radius="20px",
                     style={
                         "background": (
-                            "linear-gradient(135deg, rgba(249, 115, 22, 0.88) 0%, "
-                            "rgba(234, 88, 12, 0.88) 100%)"
+                            "linear-gradient(135deg, #C85A08 0%, #A04806 100%)"
                         )
                     },
                     display="flex",

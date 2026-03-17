@@ -14,13 +14,27 @@ from Restaurante.state.app_state import (
 )
 from Restaurante.views.shared import (
     ACCENT,
+    ACCENT_BG,
+    ACCENT_GLOW,
     ACCENT_HOVER,
-    ACCENT_SOFT,
+    BORDER_ACCENT,
     BORDER_COLOR,
-    SUCCESS_SOFT,
+    DANGER_BG,
+    DANGER_TEXT,
+    INFO_BG,
+    INFO_BORDER,
+    INFO_TEXT,
+    SURFACE_GHOST,
+    SURFACE_HOVER,
+    SURFACE_INTERACTIVE,
+    SURFACE_MUTED,
+    SURFACE_SOFT,
     TEXT_MUTED,
     TEXT_PRIMARY,
     TEXT_SECONDARY,
+    WARNING_BG,
+    WARNING_BORDER,
+    WARNING_TEXT,
     action_button,
     app_shell,
     section_card,
@@ -28,10 +42,6 @@ from Restaurante.views.shared import (
     surface_card,
 )
 
-
-READY_HIGHLIGHT = "rgba(251, 191, 36, 0.18)"
-FREE_SURFACE = "rgba(34, 197, 94, 0.15)"
-OCCUPIED_SURFACE = "rgba(239, 68, 68, 0.16)"
 
 # Tamaño mínimo táctil recomendado para tabletas (44 px según HIG / Material)
 TOUCH_BTN = "44px"
@@ -100,7 +110,7 @@ def mesa_tile(mesa: MesaView) -> rx.Component:
                     width="100%",
                     padding="0.85rem",
                     border_radius="18px",
-                    style={"background": "rgba(255,255,255,0.05)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px solid {BORDER_COLOR}",
                 ),
                 rx.box(
@@ -113,7 +123,7 @@ def mesa_tile(mesa: MesaView) -> rx.Component:
                     width="100%",
                     padding="0.85rem",
                     border_radius="18px",
-                    style={"background": "rgba(255,255,255,0.05)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px solid {BORDER_COLOR}",
                 ),
                 width="100%",
@@ -127,11 +137,11 @@ def mesa_tile(mesa: MesaView) -> rx.Component:
                             width="10px",
                             height="10px",
                             border_radius="999px",
-                            style={"background": "#F59E0B"},
+                            style={"background": WARNING_TEXT},
                         ),
                         rx.text(
                             "Hay platos listos para entregar",
-                            color="#FED7AA",
+                            color=WARNING_TEXT,
                             font_weight="700",
                         ),
                         spacing="3",
@@ -140,8 +150,8 @@ def mesa_tile(mesa: MesaView) -> rx.Component:
                     width="100%",
                     padding="0.8rem 0.95rem",
                     border_radius="18px",
-                    style={"background": READY_HIGHLIGHT},
-                    border="1px solid rgba(251, 191, 36, 0.36)",
+                    style={"background": WARNING_BG},
+                    border=f"1px solid {WARNING_BORDER}",
                 ),
                 rx.box(
                     rx.text(
@@ -156,7 +166,7 @@ def mesa_tile(mesa: MesaView) -> rx.Component:
                     width="100%",
                     padding="0.8rem 0.95rem",
                     border_radius="18px",
-                    style={"background": "rgba(255,255,255,0.05)"},
+                    style={"background": SURFACE_GHOST},
                     border=f"1px solid {BORDER_COLOR}",
                 ),
             ),
@@ -172,13 +182,13 @@ def mesa_tile(mesa: MesaView) -> rx.Component:
         style={"background": mesa.card_bg},
         border=rx.cond(
             mesa.tiene_items_listos,
-            "2px solid rgba(251, 191, 36, 0.72)",
+            f"2px solid {WARNING_BORDER}",
             mesa.card_border,
         ),
         border_radius="32px",
         box_shadow=rx.cond(
             mesa.tiene_items_listos,
-            "0 0 0 6px rgba(251, 191, 36, 0.08), 0 26px 56px rgba(249, 115, 22, 0.16)",
+            "0 0 0 4px #2A1A04, 0 26px 56px rgba(249, 115, 22, 0.16)",
             "0 18px 40px rgba(2, 6, 23, 0.28)",
         ),
         width="100%",
@@ -199,18 +209,18 @@ def categoria_button(categoria: CategoriaView) -> rx.Component:
     return rx.button(
         categoria.nombre,
         on_click=RestaurantState.seleccionar_categoria(categoria.id),
-        background=rx.cond(is_active, ACCENT, "rgba(255,255,255,0.05)"),
+        background=rx.cond(is_active, ACCENT, SURFACE_GHOST),
         color=TEXT_PRIMARY,
         border=rx.cond(
             is_active,
-            "1px solid rgba(249, 115, 22, 0.42)",
+            f"1px solid {BORDER_ACCENT}",
             f"1px solid {BORDER_COLOR}",
         ),
         border_radius="999px",
         padding_x="1rem",
         height=TOUCH_BTN,
         font_weight="700",
-        _hover={"background": "rgba(249, 115, 22, 0.18)"},
+        _hover={"background": rx.cond(is_active, ACCENT_HOVER, SURFACE_HOVER)},
     )
 
 
@@ -219,18 +229,18 @@ def all_categories_button() -> rx.Component:
     return rx.button(
         "Todas",
         on_click=RestaurantState.seleccionar_categoria(0),
-        background=rx.cond(is_active, ACCENT, "rgba(255,255,255,0.05)"),
+        background=rx.cond(is_active, ACCENT, SURFACE_GHOST),
         color=TEXT_PRIMARY,
         border=rx.cond(
             is_active,
-            "1px solid rgba(249, 115, 22, 0.42)",
+            f"1px solid {BORDER_ACCENT}",
             f"1px solid {BORDER_COLOR}",
         ),
         border_radius="999px",
         padding_x="1rem",
         height=TOUCH_BTN,
         font_weight="700",
-        _hover={"background": "rgba(249, 115, 22, 0.18)"},
+        _hover={"background": rx.cond(is_active, ACCENT_HOVER, SURFACE_HOVER)},
     )
 
 
@@ -245,11 +255,10 @@ def producto_card(producto: ProductoView) -> rx.Component:
                 border_radius="22px",
                 style={
                     "background": (
-                        "linear-gradient(135deg, rgba(249, 115, 22, 0.18) 0%, "
-                        "rgba(234, 88, 12, 0.12) 100%)"
+                        "linear-gradient(135deg, #3D1A06 0%, #2A1208 100%)"
                     )
                 },
-                border="1px solid rgba(249, 115, 22, 0.18)",
+                border=f"1px solid {BORDER_ACCENT}",
                 display="flex",
                 align_items="center",
                 justify_content="center",
@@ -267,7 +276,7 @@ def producto_card(producto: ProductoView) -> rx.Component:
                         producto.categoria_nombre,
                         padding="0.2rem 0.55rem",
                         border_radius="999px",
-                        style={"background": "rgba(255,255,255,0.05)"},
+                        style={"background": SURFACE_GHOST},
                         color=TEXT_MUTED,
                         font_size="0.72rem",
                         font_weight="700",
@@ -300,7 +309,7 @@ def producto_card(producto: ProductoView) -> rx.Component:
                 font_size="1.6rem",
                 font_weight="800",
                 flex_shrink="0",
-                box_shadow=f"0 12px 24px {ACCENT_SOFT}",
+                box_shadow=ACCENT_GLOW,
                 _hover={"background": ACCENT_HOVER},
             ),
             width="100%",
@@ -309,7 +318,7 @@ def producto_card(producto: ProductoView) -> rx.Component:
         ),
         width="100%",
         padding="0.9rem 1rem",
-        style={"background": "#1A2438"},
+        style={"background": SURFACE_SOFT},
         border=f"1px solid {BORDER_COLOR}",
         border_radius="26px",
         box_shadow="0 12px 28px rgba(2, 6, 23, 0.22)",
@@ -335,7 +344,7 @@ def _nota_input_inline(item: CarritoItem) -> rx.Component:
                 flex="1",
                 height=TOUCH_BTN,
                 border_radius="12px",
-                style={"background": "rgba(255,255,255,0.07)"},
+                style={"background": SURFACE_INTERACTIVE},
                 border=f"1px solid {ACCENT}",
                 color=TEXT_PRIMARY,
                 font_size="0.85rem",
@@ -359,7 +368,7 @@ def _nota_input_inline(item: CarritoItem) -> rx.Component:
                 width=TOUCH_BTN,
                 height=TOUCH_BTN,
                 border_radius="12px",
-                background="rgba(255,255,255,0.06)",
+                background=SURFACE_GHOST,
                 color=TEXT_MUTED,
                 border=f"1px solid {BORDER_COLOR}",
             ),
@@ -385,11 +394,11 @@ def _nota_input_inline(item: CarritoItem) -> rx.Component:
                 height="32px",
                 padding_x="0.65rem",
                 border_radius="10px",
-                background="rgba(255,255,255,0.05)",
+                background=SURFACE_GHOST,
                 color=TEXT_MUTED,
                 border=f"1px solid {BORDER_COLOR}",
                 font_size="0.78rem",
-                _hover={"background": ACCENT_SOFT, "color": TEXT_PRIMARY},
+                _hover={"background": ACCENT_BG, "color": TEXT_PRIMARY},
             ),
             width="100%",
             justify=rx.cond(item.nota != "", "between", "end"),
@@ -415,7 +424,7 @@ def carrito_row(item: CarritoItem) -> rx.Component:
                     width=TOUCH_BTN,
                     height=TOUCH_BTN,
                     border_radius="14px",
-                    background="rgba(255,255,255,0.06)",
+                    background=SURFACE_GHOST,
                     color=TEXT_PRIMARY,
                     font_size="1.25rem",
                     font_weight="800",
@@ -452,7 +461,7 @@ def carrito_row(item: CarritoItem) -> rx.Component:
         width="100%",
         padding="0.95rem",
         border_radius="20px",
-        style={"background": "rgba(255,255,255,0.04)"},
+        style={"background": SURFACE_MUTED},
         border=f"1px solid {BORDER_COLOR}",
     )
 
@@ -502,7 +511,7 @@ def historial_row(item: HistorialItem) -> rx.Component:
                     width="100%",
                     padding="0.55rem 0.75rem",
                     border_radius="14px",
-                    style={"background": "rgba(255,255,255,0.05)"},
+                    style={"background": SURFACE_GHOST},
                     color=TEXT_MUTED,
                     font_size="0.84rem",
                 ),
@@ -515,11 +524,11 @@ def historial_row(item: HistorialItem) -> rx.Component:
                     width="100%",
                     padding="0.55rem 0.75rem",
                     border_radius="14px",
-                    style={"background": "rgba(249, 115, 22, 0.12)"},
+                    style={"background": ACCENT_BG},
                     color="#FDBA74",
                     font_size="0.82rem",
                     font_weight="700",
-                    border="1px solid rgba(249, 115, 22, 0.18)",
+                    border=f"1px solid {BORDER_ACCENT}",
                 ),
                 rx.fragment(),
             ),
@@ -549,13 +558,13 @@ def historial_row(item: HistorialItem) -> rx.Component:
         style={
             "background": rx.cond(
                 item.puede_entregar,
-                "rgba(249, 115, 22, 0.14)",
-                "rgba(255,255,255,0.04)",
+                ACCENT_BG,
+                SURFACE_MUTED,
             )
         },
         border=rx.cond(
             item.puede_entregar,
-            "1px solid rgba(249, 115, 22, 0.24)",
+            f"1px solid {BORDER_ACCENT}",
             f"1px solid {BORDER_COLOR}",
         ),
     )
@@ -598,7 +607,7 @@ def _totales_bar() -> rx.Component:
         width="100%",
         padding="1rem",
         border_radius="22px",
-        style={"background": "rgba(255,255,255,0.05)"},
+        style={"background": SURFACE_MUTED},
         border=f"1px solid {BORDER_COLOR}",
     )
 
@@ -632,22 +641,22 @@ def _acciones_bar() -> rx.Component:
                 on_click=RestaurantState.solicitar_cuenta,
                 flex="1",
                 height=TOUCH_BTN,
-                background="rgba(59, 130, 246, 0.18)",
-                color="#BFDBFE",
-                border="1px solid rgba(59, 130, 246, 0.24)",
+                background=INFO_BG,
+                color=INFO_TEXT,
+                border=f"1px solid {INFO_BORDER}",
                 border_radius="16px",
-                _hover={"background": "rgba(59, 130, 246, 0.24)"},
+                _hover={"background": "#0E1E33"},
             ),
             rx.button(
                 rx.icon(tag="trash_2", size=16),
                 on_click=RestaurantState.limpiar_carrito,
                 width=TOUCH_BTN,
                 height=TOUCH_BTN,
-                background="rgba(255,255,255,0.04)",
+                background=SURFACE_GHOST,
                 color=TEXT_MUTED,
                 border=f"1px solid {BORDER_COLOR}",
                 border_radius="16px",
-                _hover={"background": "rgba(239,68,68,0.12)", "color": "#FCA5A5"},
+                _hover={"background": DANGER_BG, "color": DANGER_TEXT},
             ),
             width="100%",
             spacing="2",
@@ -691,14 +700,14 @@ def carrito_panel() -> rx.Component:
                     ),
                     padding="0.9rem 1rem",
                     border_radius="20px",
-                    style={"background": "rgba(255,255,255,0.05)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px solid {BORDER_COLOR}",
                 ),
                 width="100%",
                 justify="between",
                 align="start",
             ),
-            rx.box(height="1px", width="100%", background=BORDER_COLOR),
+            rx.box(height="1px", width="100%", style={"background": BORDER_COLOR}),
             # Carrito (items pendientes) — scrolleable si hay muchos
             rx.vstack(
                 rx.hstack(
@@ -707,8 +716,8 @@ def carrito_panel() -> rx.Component:
                         "No enviado",
                         padding="0.25rem 0.65rem",
                         border_radius="999px",
-                        style={"background": "rgba(59, 130, 246, 0.18)"},
-                        color="#BFDBFE",
+                        style={"background": INFO_BG},
+                        color=INFO_TEXT,
                         font_size="0.75rem",
                         font_weight="800",
                     ),
@@ -734,7 +743,7 @@ def carrito_panel() -> rx.Component:
                         width="100%",
                         padding="1.15rem",
                         border_radius="20px",
-                        style={"background": "rgba(255,255,255,0.03)"},
+                        style={"background": SURFACE_MUTED},
                         border=f"1px dashed {BORDER_COLOR}",
                         color=TEXT_MUTED,
                         text_align="center",
@@ -744,7 +753,7 @@ def carrito_panel() -> rx.Component:
                 align="start",
                 spacing="3",
             ),
-            rx.box(height="1px", width="100%", background=BORDER_COLOR),
+            rx.box(height="1px", width="100%", style={"background": BORDER_COLOR}),
             # Historial (ya enviado) — scrolleable
             rx.vstack(
                 rx.hstack(
@@ -753,7 +762,7 @@ def carrito_panel() -> rx.Component:
                         "Historial",
                         padding="0.25rem 0.65rem",
                         border_radius="999px",
-                        style={"background": "rgba(255,255,255,0.05)"},
+                        style={"background": SURFACE_GHOST},
                         color=TEXT_MUTED,
                         font_size="0.75rem",
                         font_weight="700",
@@ -780,7 +789,7 @@ def carrito_panel() -> rx.Component:
                         width="100%",
                         padding="1.15rem",
                         border_radius="20px",
-                        style={"background": "rgba(255,255,255,0.03)"},
+                        style={"background": SURFACE_MUTED},
                         border=f"1px dashed {BORDER_COLOR}",
                         color=TEXT_MUTED,
                         text_align="center",
@@ -841,7 +850,7 @@ def mesas_section() -> rx.Component:
                     ),
                     padding="0.85rem 1rem",
                     border_radius="18px",
-                    style={"background": "rgba(255,255,255,0.04)"},
+                    style={"background": SURFACE_GHOST},
                     border=f"1px solid {BORDER_COLOR}",
                 ),
                 width="100%",
@@ -931,14 +940,14 @@ def _tab_button(label: str, tab_key: str, icon_tag: str) -> rx.Component:
         flex="1",
         height="48px",
         border_radius="16px",
-        background=rx.cond(is_active, ACCENT, "rgba(255,255,255,0.04)"),
+        background=rx.cond(is_active, ACCENT, SURFACE_GHOST),
         color=rx.cond(is_active, TEXT_PRIMARY, TEXT_MUTED),
         border=rx.cond(
             is_active,
-            "1px solid rgba(249, 115, 22, 0.38)",
+            f"1px solid {BORDER_ACCENT}",
             f"1px solid {BORDER_COLOR}",
         ),
-        _hover={"background": rx.cond(is_active, ACCENT_HOVER, "rgba(255,255,255,0.08)")},
+        _hover={"background": rx.cond(is_active, ACCENT_HOVER, SURFACE_HOVER)},
     )
 
 

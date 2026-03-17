@@ -8,6 +8,7 @@ from Restaurante.state.app_state import RestaurantState, VentaHistorialView
 from Restaurante.views.shared import (
     ACCENT,
     BORDER_COLOR,
+    SURFACE_MUTED,
     TEXT_MUTED,
     TEXT_PRIMARY,
     TEXT_SECONDARY,
@@ -76,7 +77,7 @@ def sales_table() -> rx.Component:
                     overflow_x="auto",
                     padding="0.2rem",
                     border_radius="22px",
-                    style={"background": "rgba(255,255,255,0.03)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px solid {BORDER_COLOR}",
                 ),
                 rx.box(
@@ -95,7 +96,7 @@ def sales_table() -> rx.Component:
                     width="100%",
                     padding="3rem 1.25rem",
                     border_radius="24px",
-                    style={"background": "rgba(255,255,255,0.03)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px dashed {BORDER_COLOR}",
                 ),
             ),

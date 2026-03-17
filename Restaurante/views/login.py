@@ -7,12 +7,17 @@ import reflex as rx
 from Restaurante.state.app_state import RestaurantState
 from Restaurante.views.shared import (
     ACCENT,
+    ACCENT_GLOW,
     ACCENT_HOVER,
-    ACCENT_SOFT,
     BORDER_COLOR,
+    BORDER_STRONG,
+    DANGER_BG,
+    DANGER_TEXT,
     PAGE_BACKGROUND,
-    SOFT_GLOW,
-    SURFACE_BASE,
+    SURFACE_ELEVATED,
+    SURFACE_GHOST,
+    SURFACE_HOVER,
+    SURFACE_MUTED,
     TEXT_MUTED,
     TEXT_PRIMARY,
     TEXT_SECONDARY,
@@ -22,7 +27,7 @@ from Restaurante.views.shared import (
 def keypad_button(
     label: str,
     on_click,
-    background: str = "rgba(255,255,255,0.06)",
+    background: str = SURFACE_GHOST,
     color: str = TEXT_PRIMARY,
 ) -> rx.Component:
     return rx.button(
@@ -36,8 +41,8 @@ def keypad_button(
         font_size=rx.breakpoints(initial="1.15rem", md="1.35rem"),
         font_weight="800",
         border=f"1px solid {BORDER_COLOR}",
-        box_shadow=SOFT_GLOW,
-        _hover={"transform": "translateY(-1px)", "opacity": "0.96"},
+        box_shadow="0 2px 8px rgba(2, 6, 23, 0.30)",
+        _hover={"transform": "translateY(-1px)", "background": SURFACE_HOVER},
     )
 
 
@@ -55,14 +60,13 @@ def login_page() -> rx.Component:
                                 border_radius="18px",
                                 style={
                                     "background": (
-                                        "linear-gradient(135deg, rgba(249, 115, 22, 0.88) 0%, "
-                                        "rgba(234, 88, 12, 0.88) 100%)"
+                                        "linear-gradient(135deg, #C85A08 0%, #A04806 100%)"
                                     )
                                 },
                                 display="flex",
                                 align_items="center",
                                 justify_content="center",
-                                box_shadow=f"0 12px 28px {ACCENT_SOFT}",
+                                box_shadow=ACCENT_GLOW,
                             ),
                             rx.vstack(
                                 rx.text(
@@ -105,9 +109,9 @@ def login_page() -> rx.Component:
                         font_size="1.9rem",
                         font_weight="800",
                         letter_spacing="0.3em",
-                        style={"background": "rgba(255,255,255,0.04)"},
+                        style={"background": SURFACE_ELEVATED},
                         color=TEXT_PRIMARY,
-                        border=f"1px solid {BORDER_COLOR}",
+                        border=f"1px solid {BORDER_STRONG}",
                         border_radius="20px",
                         on_key_down=rx.cond(
                             rx.Var.create("event.key") == "Enter",
@@ -128,8 +132,8 @@ def login_page() -> rx.Component:
                         keypad_button(
                             "Borrar",
                             RestaurantState.backspace_login_pin,
-                            background="rgba(239, 68, 68, 0.14)",
-                            color="#FCA5A5",
+                            background=DANGER_BG,
+                            color=DANGER_TEXT,
                         ),
                         keypad_button("0", RestaurantState.append_login_digit("0")),
                         keypad_button(
@@ -148,11 +152,11 @@ def login_page() -> rx.Component:
                         width="100%",
                         height="52px",
                         border_radius="18px",
-                        background="rgba(255,255,255,0.04)",
+                        background=SURFACE_GHOST,
                         color=TEXT_SECONDARY,
                         border=f"1px solid {BORDER_COLOR}",
                         font_weight="700",
-                        _hover={"background": "rgba(255,255,255,0.08)"},
+                        _hover={"background": SURFACE_HOVER},
                     ),
                     rx.box(
                         rx.text(
@@ -164,26 +168,26 @@ def login_page() -> rx.Component:
                         width="100%",
                         padding="0.85rem 1rem",
                         border_radius="18px",
-                        style={"background": "rgba(255,255,255,0.03)"},
+                        style={"background": SURFACE_MUTED},
                         border=f"1px solid {BORDER_COLOR}",
                     ),
                     width="100%",
                     align="center",
                     spacing="5",
                 ),
-                width="100%",
-                max_width="400px",
-                padding=rx.breakpoints(initial="1.2rem", md="1.5rem"),
+                width=rx.breakpoints(initial="100%", sm="420px"),
+                max_width="420px",
+                padding=rx.breakpoints(initial="1.2rem", sm="1.6rem", md="2rem"),
                 border_radius="32px",
                 style={"background": "linear-gradient(160deg, #131F33 0%, #0F1826 100%)"},
                 border=f"1px solid {BORDER_COLOR}",
-                box_shadow="0 28px 80px rgba(2, 6, 23, 0.48)",
+                box_shadow="0 28px 80px rgba(2, 6, 23, 0.60)",
             ),
             min_height="100vh",
             width="100%",
-            padding="1rem",
+            padding=rx.breakpoints(initial="1rem", md="2rem"),
         ),
         min_height="100vh",
         width="100%",
-        background=PAGE_BACKGROUND,
+        style={"background": PAGE_BACKGROUND},
     )

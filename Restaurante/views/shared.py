@@ -7,27 +7,67 @@ import reflex as rx
 from Restaurante.state.app_state import RestaurantState
 
 
-PAGE_BACKGROUND = (
-    "radial-gradient(circle at top right, rgba(249, 115, 22, 0.12), transparent 28%), "
-    "radial-gradient(circle at bottom left, rgba(239, 68, 68, 0.06), transparent 22%), "
-    "linear-gradient(180deg, #060A10 0%, #0B1220 100%)"
-)
-SURFACE_BASE = "#0F1826"
-SURFACE_ELEVATED = "#111B2E"
-SURFACE_SOFT = "#162030"
-SURFACE_MUTED = "#0D1520"
-BORDER_COLOR = "rgba(148, 163, 184, 0.22)"
+# ---------------------------------------------------------------------------
+# PALETA DE COLORES — 100 % sólidos, cero rgba / transparencias
+# ---------------------------------------------------------------------------
+
+# Fondo de la aplicación
+PAGE_BACKGROUND = "linear-gradient(180deg, #060A10 0%, #0B1220 100%)"
+
+# Superficies oscuras (capas de profundidad, todas sólidas)
+SURFACE_BASE = "#0F1826"       # Capa base para tarjetas principales
+SURFACE_ELEVATED = "#111B2E"   # Sidebar, drawer, cabeceras
+SURFACE_SOFT = "#162030"       # Tarjetas secundarias internas
+SURFACE_MUTED = "#0D1520"      # Fondo de hints / empty states
+SURFACE_GHOST = "#131F36"      # Botones fantasma / icon buttons
+SURFACE_HOVER = "#1A2540"      # Estado hover genérico
+SURFACE_INTERACTIVE = "#1E2B42" # Elemento activo / énfasis leve
+
+# Bordes — sólidos, sin opacidad
+BORDER_COLOR = "#1E2B40"       # Borde sutil por defecto
+BORDER_STRONG = "#2A3958"      # Borde con más presencia
+BORDER_ACCENT = "#623410"      # Borde naranja / acento activo
+
+# Tipografía
 TEXT_PRIMARY = "#F8FAFC"
 TEXT_SECONDARY = "#CBD5E1"
-TEXT_MUTED = "#94A3B8"
+TEXT_MUTED = "#64748B"
+
+# Acento de marca (naranja Norkys)
 ACCENT = "#F97316"
 ACCENT_HOVER = "#EA580C"
-ACCENT_SOFT = "rgba(249, 115, 22, 0.16)"
-SUCCESS_SOFT = "rgba(34, 197, 94, 0.16)"
-DANGER_SOFT = "rgba(239, 68, 68, 0.16)"
-GLOW = "0 22px 60px rgba(2, 6, 23, 0.44)"
-SOFT_GLOW = "0 14px 36px rgba(2, 6, 23, 0.28)"
+ACCENT_BG = "#3D1A06"          # Fondo oscuro de naranja (ex ACCENT_SOFT)
+ACCENT_TEXT = "#FDBA74"        # Texto naranja claro sobre fondo oscuro
+ACCENT_SOFT = ACCENT_BG        # Alias retrocompat con vistas anteriores
 
+# Estados semánticos — todos sólidos
+SUCCESS_BG = "#0A2818"
+SUCCESS_TEXT = "#4ADE80"
+SUCCESS_BORDER = "#155229"
+SUCCESS_SOFT = SUCCESS_BG      # Alias retrocompat
+
+DANGER_BG = "#2A0A0A"
+DANGER_TEXT = "#FCA5A5"
+DANGER_BORDER = "#521515"
+DANGER_SOFT = DANGER_BG        # Alias retrocompat
+
+WARNING_BG = "#2A1A04"
+WARNING_TEXT = "#FCD34D"
+WARNING_BORDER = "#52360A"
+
+INFO_BG = "#0A1522"
+INFO_TEXT = "#93C5FD"
+INFO_BORDER = "#1A3550"
+
+# Sombras (las box-shadow pueden mantener rgba: son decorativas, no fondos)
+GLOW = "0 22px 60px rgba(2, 6, 23, 0.60)"
+SOFT_GLOW = "0 14px 36px rgba(2, 6, 23, 0.40)"
+ACCENT_GLOW = "0 12px 28px rgba(249, 115, 22, 0.22)"
+
+
+# ---------------------------------------------------------------------------
+# Tarjetas base
+# ---------------------------------------------------------------------------
 
 def surface_card(*children, **props) -> rx.Component:
     """Tarjeta base para todas las superficies del POS.
@@ -39,6 +79,7 @@ def surface_card(*children, **props) -> rx.Component:
     border = props.pop("border", f"1px solid {BORDER_COLOR}")
     border_radius = props.pop("border_radius", "28px")
     box_shadow = props.pop("box_shadow", GLOW)
+    width = props.pop("width", "100%")
     incoming_style = props.pop("style", {})
     final_style = {
         "background": bg,
@@ -47,7 +88,7 @@ def surface_card(*children, **props) -> rx.Component:
         "box_shadow": box_shadow,
         **incoming_style,
     }
-    return rx.box(*children, style=final_style, width="100%", **props)
+    return rx.box(*children, style=final_style, width=width, **props)
 
 
 def section_card(*children, **props) -> rx.Component:
@@ -56,6 +97,7 @@ def section_card(*children, **props) -> rx.Component:
     border = props.pop("border", f"1px solid {BORDER_COLOR}")
     border_radius = props.pop("border_radius", "24px")
     box_shadow = props.pop("box_shadow", SOFT_GLOW)
+    width = props.pop("width", "100%")
     incoming_style = props.pop("style", {})
     final_style = {
         "background": bg,
@@ -64,8 +106,12 @@ def section_card(*children, **props) -> rx.Component:
         "box_shadow": box_shadow,
         **incoming_style,
     }
-    return rx.box(*children, style=final_style, width="100%", **props)
+    return rx.box(*children, style=final_style, width=width, **props)
 
+
+# ---------------------------------------------------------------------------
+# Botón de acción principal
+# ---------------------------------------------------------------------------
 
 def action_button(label: str, on_click, icon_tag: str = "arrow_right") -> rx.Component:
     return rx.button(
@@ -85,6 +131,10 @@ def action_button(label: str, on_click, icon_tag: str = "arrow_right") -> rx.Com
     )
 
 
+# ---------------------------------------------------------------------------
+# Banner de estado
+# ---------------------------------------------------------------------------
+
 def status_banner(message) -> rx.Component:
     return section_card(
         rx.hstack(
@@ -93,7 +143,7 @@ def status_banner(message) -> rx.Component:
                 height="10px",
                 border_radius="999px",
                 style={"background": ACCENT},
-                box_shadow=f"0 0 0 8px {ACCENT_SOFT}",
+                box_shadow=f"0 0 0 8px {ACCENT_BG}",
             ),
             rx.text(
                 message,
@@ -106,6 +156,10 @@ def status_banner(message) -> rx.Component:
         padding="1rem 1.2rem",
     )
 
+
+# ---------------------------------------------------------------------------
+# KPI Card
+# ---------------------------------------------------------------------------
 
 def kpi_card(title: str, value, description: str = "", accent_color: str = ACCENT) -> rx.Component:
     return surface_card(
@@ -136,11 +190,13 @@ def kpi_card(title: str, value, description: str = "", accent_color: str = ACCEN
         ),
         padding="1.2rem 1.3rem",
         border=f"1px solid {accent_color}",
-        background=(
-            f"linear-gradient(160deg, #131F33 0%, #0F1826 100%)"
-        ),
+        background="linear-gradient(160deg, #131F33 0%, #0F1826 100%)",
     )
 
+
+# ---------------------------------------------------------------------------
+# Branding y usuario
+# ---------------------------------------------------------------------------
 
 def _brand(compact: bool = False) -> rx.Component:
     return rx.hstack(
@@ -151,14 +207,13 @@ def _brand(compact: bool = False) -> rx.Component:
             border_radius="18px",
             style={
                 "background": (
-                    "linear-gradient(135deg, rgba(249, 115, 22, 0.88) 0%, "
-                    "rgba(234, 88, 12, 0.88) 100%)"
+                    "linear-gradient(135deg, #C85A08 0%, #A04806 100%)"
                 )
             },
             display="flex",
             align_items="center",
             justify_content="center",
-            box_shadow="0 10px 22px rgba(249, 115, 22, 0.28)",
+            box_shadow=ACCENT_GLOW,
         ),
         rx.cond(
             compact,
@@ -193,11 +248,11 @@ def _user_summary() -> rx.Component:
             width="42px",
             height="42px",
             border_radius="16px",
-            style={"background": "rgba(255,255,255,0.08)"},
+            style={"background": SURFACE_INTERACTIVE},
             display="flex",
             align_items="center",
             justify_content="center",
-            border=f"1px solid {BORDER_COLOR}",
+            border=f"1px solid {BORDER_STRONG}",
         ),
         rx.vstack(
             rx.text(
@@ -235,18 +290,22 @@ def user_session_badge() -> rx.Component:
                 align="center",
             ),
             on_click=RestaurantState.logout,
-            background=DANGER_SOFT,
-            color="#FCA5A5",
-            border=f"1px solid rgba(248, 113, 113, 0.20)",
+            background=DANGER_BG,
+            color=DANGER_TEXT,
+            border=f"1px solid {DANGER_BORDER}",
             border_radius="16px",
             height="42px",
             padding_x="0.95rem",
-            _hover={"background": "rgba(239, 68, 68, 0.22)"},
+            _hover={"background": "#3D1010"},
         ),
         spacing="3",
         align="center",
     )
 
+
+# ---------------------------------------------------------------------------
+# Navegación
+# ---------------------------------------------------------------------------
 
 _NAV_DESCRIPTIONS = {
     "Mozos": "Mesas y comanda",
@@ -271,8 +330,8 @@ def _desktop_nav_item(label: str, href: str, icon_tag: str, active: bool) -> rx.
                     style={
                         "background": rx.cond(
                             active,
-                            "rgba(255,255,255,0.12)",
-                            "rgba(255,255,255,0.04)",
+                            SURFACE_INTERACTIVE,
+                            SURFACE_GHOST,
                         )
                     },
                     display="flex",
@@ -307,16 +366,16 @@ def _desktop_nav_item(label: str, href: str, icon_tag: str, active: bool) -> rx.
             style={
                 "background": rx.cond(
                     active,
-                    "linear-gradient(135deg, rgba(249, 115, 22, 0.24) 0%, rgba(234, 88, 12, 0.10) 100%)",
+                    "linear-gradient(135deg, #4A2208 0%, #2A1408 100%)",
                     "transparent",
                 )
             },
             border=rx.cond(
                 active,
-                "1px solid rgba(249, 115, 22, 0.34)",
+                f"1px solid {BORDER_ACCENT}",
                 "1px solid transparent",
             ),
-            _hover={"background": "rgba(255,255,255,0.06)"},
+            _hover={"background": SURFACE_GHOST},
         ),
         href=href,
         width="100%",
@@ -336,17 +395,18 @@ def _mobile_nav_item(label: str, href: str, icon_tag: str, active: bool) -> rx.C
             ),
             width="100%",
             padding="0.85rem 1rem",
+            min_height="48px",
             border_radius="18px",
             style={
                 "background": rx.cond(
                     active,
-                    "rgba(249, 115, 22, 0.18)",
-                    "rgba(255,255,255,0.03)",
+                    ACCENT_BG,
+                    SURFACE_MUTED,
                 )
             },
             border=rx.cond(
                 active,
-                "1px solid rgba(249, 115, 22, 0.32)",
+                f"1px solid {BORDER_ACCENT}",
                 f"1px solid {BORDER_COLOR}",
             ),
         ),
@@ -402,9 +462,12 @@ def _nav_stack(active: str, mobile: bool = False) -> rx.Component:
 
 def module_nav(active: str) -> rx.Component:
     """Compatibilidad con vistas previas."""
-
     return _nav_stack(active, mobile=False)
 
+
+# ---------------------------------------------------------------------------
+# Sidebar desktop
+# ---------------------------------------------------------------------------
 
 def _desktop_sidebar(active: str) -> rx.Component:
     return rx.box(
@@ -418,11 +481,11 @@ def _desktop_sidebar(active: str) -> rx.Component:
                 rx.icon_button(
                     rx.icon(tag="menu", size=18),
                     on_click=RestaurantState.toggle_sidebar,
-                    background="rgba(255,255,255,0.06)",
+                    background=SURFACE_GHOST,
                     color=TEXT_PRIMARY,
                     border=f"1px solid {BORDER_COLOR}",
                     border_radius="16px",
-                    _hover={"background": "rgba(255,255,255,0.10)"},
+                    _hover={"background": SURFACE_HOVER},
                 ),
                 width="100%",
                 justify="between",
@@ -452,7 +515,7 @@ def _desktop_sidebar(active: str) -> rx.Component:
                     width="100%",
                     padding="1rem",
                     border_radius="20px",
-                    style={"background": "rgba(255,255,255,0.04)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px solid {BORDER_COLOR}",
                 ),
             ),
@@ -475,17 +538,21 @@ def _desktop_sidebar(active: str) -> rx.Component:
     )
 
 
+# ---------------------------------------------------------------------------
+# Drawer de navegación móvil
+# ---------------------------------------------------------------------------
+
 def _mobile_nav_drawer(active: str) -> rx.Component:
     return rx.box(
         rx.drawer.root(
             rx.drawer.trigger(
                 rx.icon_button(
                     rx.icon(tag="menu", size=18),
-                    background="rgba(255,255,255,0.08)",
+                    background=SURFACE_GHOST,
                     color=TEXT_PRIMARY,
                     border=f"1px solid {BORDER_COLOR}",
                     border_radius="16px",
-                    _hover={"background": "rgba(255,255,255,0.12)"},
+                    _hover={"background": SURFACE_HOVER},
                 )
             ),
             rx.drawer.portal(
@@ -498,7 +565,7 @@ def _mobile_nav_drawer(active: str) -> rx.Component:
                                 rx.drawer.close(
                                     rx.icon_button(
                                         rx.icon(tag="menu", size=18),
-                                        background="rgba(255,255,255,0.06)",
+                                        background=SURFACE_GHOST,
                                         color=TEXT_PRIMARY,
                                         border=f"1px solid {BORDER_COLOR}",
                                         border_radius="16px",
@@ -521,7 +588,7 @@ def _mobile_nav_drawer(active: str) -> rx.Component:
                         height="100%",
                         padding="1.1rem",
                         background=SURFACE_ELEVATED,
-                        border_right=f"1px solid {BORDER_COLOR}",
+                        border_right=f"1px solid {BORDER_STRONG}",
                     ),
                     justify_content="flex-start",
                 ),
@@ -531,6 +598,10 @@ def _mobile_nav_drawer(active: str) -> rx.Component:
         display=rx.breakpoints(initial="block", lg="none"),
     )
 
+
+# ---------------------------------------------------------------------------
+# Cabecera de página
+# ---------------------------------------------------------------------------
 
 def _page_header(
     active: str,
@@ -569,7 +640,6 @@ def _page_header(
                 ),
                 rx.hstack(
                     action if action is not None else rx.fragment(),
-                    # Usuario y logout: solo visible en desktop
                     rx.cond(
                         RestaurantState.autenticado,
                         rx.box(
@@ -603,9 +673,13 @@ def _page_header(
             align="start",
         ),
         padding=rx.breakpoints(initial="0.95rem 1rem", md="1.35rem"),
-        background="linear-gradient(160deg, #131F33 0%, #0F1826 100%)",
+        background=SURFACE_ELEVATED,
     )
 
+
+# ---------------------------------------------------------------------------
+# Shell principal de la aplicación
+# ---------------------------------------------------------------------------
 
 def app_shell(
     *,

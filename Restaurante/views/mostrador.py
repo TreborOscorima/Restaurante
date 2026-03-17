@@ -14,9 +14,15 @@ from Restaurante.state.app_state import (
 )
 from Restaurante.views.shared import (
     ACCENT,
+    ACCENT_BG,
+    ACCENT_GLOW,
     ACCENT_HOVER,
-    ACCENT_SOFT,
+    BORDER_ACCENT,
     BORDER_COLOR,
+    SURFACE_ELEVATED,
+    SURFACE_GHOST,
+    SURFACE_HOVER,
+    SURFACE_MUTED,
     TEXT_MUTED,
     TEXT_PRIMARY,
     TEXT_SECONDARY,
@@ -33,18 +39,18 @@ def category_button(categoria: CategoriaView) -> rx.Component:
     return rx.button(
         categoria.nombre,
         on_click=RestaurantState.seleccionar_mostrador_categoria(categoria.id),
-        background=rx.cond(is_active, ACCENT, "rgba(255,255,255,0.05)"),
+        background=rx.cond(is_active, ACCENT, SURFACE_GHOST),
         color=TEXT_PRIMARY,
         border=rx.cond(
             is_active,
-            "1px solid rgba(249, 115, 22, 0.34)",
+            f"1px solid {BORDER_ACCENT}",
             f"1px solid {BORDER_COLOR}",
         ),
         border_radius="999px",
         padding_x="1rem",
         padding_y="0.95rem",
         font_weight="700",
-        _hover={"background": "rgba(249, 115, 22, 0.18)"},
+        _hover={"background": rx.cond(is_active, ACCENT_HOVER, SURFACE_HOVER)},
     )
 
 
@@ -53,18 +59,18 @@ def all_categories_button() -> rx.Component:
     return rx.button(
         "Todas",
         on_click=RestaurantState.seleccionar_mostrador_categoria(0),
-        background=rx.cond(is_active, ACCENT, "rgba(255,255,255,0.05)"),
+        background=rx.cond(is_active, ACCENT, SURFACE_GHOST),
         color=TEXT_PRIMARY,
         border=rx.cond(
             is_active,
-            "1px solid rgba(249, 115, 22, 0.34)",
+            f"1px solid {BORDER_ACCENT}",
             f"1px solid {BORDER_COLOR}",
         ),
         border_radius="999px",
         padding_x="1rem",
         padding_y="0.95rem",
         font_weight="700",
-        _hover={"background": "rgba(249, 115, 22, 0.18)"},
+        _hover={"background": rx.cond(is_active, ACCENT_HOVER, SURFACE_HOVER)},
     )
 
 
@@ -78,11 +84,10 @@ def producto_card(producto: ProductoView) -> rx.Component:
                 border_radius="22px",
                 style={
                     "background": (
-                        "linear-gradient(135deg, rgba(249, 115, 22, 0.18) 0%, "
-                        "rgba(234, 88, 12, 0.12) 100%)"
+                        "linear-gradient(135deg, #3D1A06 0%, #2A1208 100%)"
                     )
                 },
-                border="1px solid rgba(249, 115, 22, 0.18)",
+                border=f"1px solid {BORDER_ACCENT}",
                 display="flex",
                 align_items="center",
                 justify_content="center",
@@ -95,7 +100,7 @@ def producto_card(producto: ProductoView) -> rx.Component:
                         producto.categoria_nombre,
                         padding="0.25rem 0.65rem",
                         border_radius="999px",
-                        style={"background": "rgba(255,255,255,0.05)"},
+                        style={"background": SURFACE_GHOST},
                         color=TEXT_MUTED,
                         font_size="0.74rem",
                         font_weight="700",
@@ -131,7 +136,7 @@ def producto_card(producto: ProductoView) -> rx.Component:
                 font_size="1.6rem",
                 font_weight="800",
                 flex_shrink="0",
-                box_shadow=f"0 12px 24px {ACCENT_SOFT}",
+                box_shadow=ACCENT_GLOW,
                 _hover={"background": ACCENT_HOVER},
             ),
             width="100%",
@@ -163,7 +168,7 @@ def carrito_row(item: CarritoItem) -> rx.Component:
                     width="34px",
                     height="34px",
                     border_radius="12px",
-                    background="rgba(255,255,255,0.06)",
+                    background=SURFACE_GHOST,
                     color=TEXT_PRIMARY,
                     border=f"1px solid {BORDER_COLOR}",
                 ),
@@ -194,7 +199,7 @@ def carrito_row(item: CarritoItem) -> rx.Component:
         width="100%",
         padding="0.9rem",
         border_radius="20px",
-        style={"background": "rgba(255,255,255,0.04)"},
+        style={"background": SURFACE_MUTED},
         border=f"1px solid {BORDER_COLOR}",
     )
 
@@ -226,7 +231,7 @@ def carrito_panel() -> rx.Component:
                 placeholder="Nombre del cliente",
                 width="100%",
                 size="3",
-                style={"background": "rgba(255,255,255,0.04)"},
+                style={"background": SURFACE_ELEVATED},
                 color=TEXT_PRIMARY,
                 border=f"1px solid {BORDER_COLOR}",
             ),
@@ -242,7 +247,7 @@ def carrito_panel() -> rx.Component:
                     width="100%",
                     padding="0.85rem",
                     border_radius="18px",
-                    style={"background": "rgba(255,255,255,0.05)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px solid {BORDER_COLOR}",
                 ),
                 rx.box(
@@ -256,7 +261,7 @@ def carrito_panel() -> rx.Component:
                     width="100%",
                     padding="0.85rem",
                     border_radius="18px",
-                    style={"background": "rgba(255,255,255,0.05)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px solid {BORDER_COLOR}",
                 ),
                 width="100%",
@@ -274,7 +279,7 @@ def carrito_panel() -> rx.Component:
                     width="100%",
                     padding="1.15rem",
                     border_radius="20px",
-                    style={"background": "rgba(255,255,255,0.03)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px dashed {BORDER_COLOR}",
                     color=TEXT_MUTED,
                     text_align="center",
@@ -296,7 +301,7 @@ def carrito_panel() -> rx.Component:
                     "Limpiar carrito",
                     on_click=RestaurantState.limpiar_carrito_mostrador,
                     width="100%",
-                    background="rgba(255,255,255,0.04)",
+                    background=SURFACE_GHOST,
                     color=TEXT_SECONDARY,
                     border=f"1px solid {BORDER_COLOR}",
                     border_radius="18px",
@@ -323,7 +328,7 @@ def pedido_item(line: str) -> rx.Component:
         width="100%",
         padding="0.72rem 0.85rem",
         border_radius="16px",
-        style={"background": "rgba(255,255,255,0.05)"},
+        style={"background": SURFACE_GHOST},
         border=f"1px solid {BORDER_COLOR}",
         color=TEXT_SECONDARY,
         font_weight="600",
@@ -356,7 +361,7 @@ def pedido_listo_card(pedido: MostradorEntregaView) -> rx.Component:
                     f"{pedido.items_count} item(s)",
                     padding="0.3rem 0.75rem",
                     border_radius="999px",
-                    style={"background": "rgba(249, 115, 22, 0.16)"},
+                    style={"background": ACCENT_BG},
                     color="#FDBA74",
                     font_weight="800",
                     font_size="0.8rem",
@@ -387,8 +392,8 @@ def pedido_listo_card(pedido: MostradorEntregaView) -> rx.Component:
         ),
         width="100%",
         padding="1.1rem",
-        style={"background": "rgba(249, 115, 22, 0.14)"},
-        border="1px solid rgba(249, 115, 22, 0.24)",
+        style={"background": ACCENT_BG},
+        border=f"1px solid {BORDER_ACCENT}",
         border_radius="24px",
     )
 
@@ -424,7 +429,7 @@ def pedidos_listos_panel() -> rx.Component:
                     text_align="center",
                     padding="0.55rem 0.85rem",
                     border_radius="999px",
-                    style={"background": "rgba(249, 115, 22, 0.16)"},
+                    style={"background": ACCENT_BG},
                     color="#FDBA74",
                     font_weight="800",
                 ),
@@ -444,7 +449,7 @@ def pedidos_listos_panel() -> rx.Component:
                     width="100%",
                     padding="1.15rem",
                     border_radius="20px",
-                    style={"background": "rgba(255,255,255,0.03)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px dashed {BORDER_COLOR}",
                     color=TEXT_MUTED,
                     text_align="center",
@@ -494,7 +499,7 @@ def pedido_entregado_card(pedido: MostradorEntregadoView) -> rx.Component:
         width="100%",
         padding="0.95rem 1rem",
         border_radius="18px",
-        style={"background": "rgba(255,255,255,0.03)"},
+        style={"background": SURFACE_MUTED},
         border=f"1px solid {BORDER_COLOR}",
         opacity="0.92",
     )
@@ -536,7 +541,7 @@ def pedidos_entregados_panel() -> rx.Component:
                     width="100%",
                     padding="1.1rem",
                     border_radius="18px",
-                    style={"background": "rgba(255,255,255,0.03)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px dashed {BORDER_COLOR}",
                     color=TEXT_MUTED,
                     text_align="center",

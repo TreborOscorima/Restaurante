@@ -9,6 +9,13 @@ from Restaurante.views.shared import (
     ACCENT,
     ACCENT_HOVER,
     BORDER_COLOR,
+    DANGER_BG,
+    DANGER_TEXT,
+    SUCCESS_BG,
+    SUCCESS_TEXT,
+    SURFACE_ELEVATED,
+    SURFACE_GHOST,
+    SURFACE_MUTED,
     TEXT_MUTED,
     TEXT_PRIMARY,
     TEXT_SECONDARY,
@@ -29,7 +36,7 @@ def form_input(value, on_change, placeholder: str) -> rx.Component:
         on_change=on_change,
         placeholder=placeholder,
         width="100%",
-        style={"background": "rgba(255,255,255,0.04)"},
+        style={"background": SURFACE_ELEVATED},
         color=TEXT_PRIMARY,
         border=f"1px solid {BORDER_COLOR}",
     )
@@ -41,7 +48,7 @@ def form_textarea(value, on_change, placeholder: str) -> rx.Component:
         on_change=on_change,
         placeholder=placeholder,
         width="100%",
-        style={"background": "rgba(255,255,255,0.04)"},
+        style={"background": SURFACE_ELEVATED},
         color=TEXT_PRIMARY,
         border=f"1px solid {BORDER_COLOR}",
     )
@@ -67,7 +74,7 @@ def categoria_form() -> rx.Component:
                 rx.button(
                     "Nueva",
                     on_click=RestaurantState.nueva_categoria,
-                    background="rgba(255,255,255,0.05)",
+                    background=SURFACE_GHOST,
                     color=TEXT_PRIMARY,
                     border=f"1px solid {BORDER_COLOR}",
                     border_radius="16px",
@@ -131,11 +138,11 @@ def categoria_row(categoria: CategoriaView) -> rx.Component:
                         style={
                             "background": rx.cond(
                                 categoria.activa,
-                                "rgba(34, 197, 94, 0.16)",
-                                "rgba(148, 163, 184, 0.14)",
+                                SUCCESS_BG,
+                                SURFACE_GHOST,
                             )
                         },
-                        color=rx.cond(categoria.activa, "#BBF7D0", TEXT_MUTED),
+                        color=rx.cond(categoria.activa, SUCCESS_TEXT, TEXT_MUTED),
                         font_weight="700",
                         font_size="0.75rem",
                     ),
@@ -156,7 +163,7 @@ def categoria_row(categoria: CategoriaView) -> rx.Component:
                 rx.button(
                     "Editar",
                     on_click=RestaurantState.editar_categoria(categoria.id),
-                    background="rgba(255,255,255,0.05)",
+                    background=SURFACE_GHOST,
                     color=TEXT_PRIMARY,
                     border=f"1px solid {BORDER_COLOR}",
                     border_radius="14px",
@@ -166,10 +173,10 @@ def categoria_row(categoria: CategoriaView) -> rx.Component:
                     on_click=RestaurantState.toggle_categoria_activa(categoria.id),
                     background=rx.cond(
                         categoria.activa,
-                        "rgba(239, 68, 68, 0.14)",
-                        "rgba(34, 197, 94, 0.14)",
+                        DANGER_BG,
+                        SUCCESS_BG,
                     ),
-                    color=rx.cond(categoria.activa, "#FCA5A5", "#BBF7D0"),
+                    color=rx.cond(categoria.activa, DANGER_TEXT, SUCCESS_TEXT),
                     border=f"1px solid {BORDER_COLOR}",
                     border_radius="14px",
                     font_weight="700",
@@ -185,7 +192,7 @@ def categoria_row(categoria: CategoriaView) -> rx.Component:
         width="100%",
         padding="1rem",
         border_radius="22px",
-        style={"background": "rgba(255,255,255,0.03)"},
+        style={"background": SURFACE_MUTED},
         border=f"1px solid {BORDER_COLOR}",
     )
 
@@ -223,7 +230,7 @@ def disponibilidad_selector() -> rx.Component:
             background=rx.cond(
                 RestaurantState.producto_form_disponible,
                 ACCENT,
-                "rgba(255,255,255,0.05)",
+                SURFACE_GHOST,
             ),
             color=TEXT_PRIMARY,
             border=f"1px solid {BORDER_COLOR}",
@@ -235,13 +242,13 @@ def disponibilidad_selector() -> rx.Component:
             on_click=RestaurantState.set_producto_form_disponible(False),
             background=rx.cond(
                 RestaurantState.producto_form_disponible,
-                "rgba(255,255,255,0.05)",
-                "rgba(239, 68, 68, 0.14)",
+                SURFACE_GHOST,
+                DANGER_BG,
             ),
             color=rx.cond(
                 RestaurantState.producto_form_disponible,
                 TEXT_PRIMARY,
-                "#FCA5A5",
+                DANGER_TEXT,
             ),
             border=f"1px solid {BORDER_COLOR}",
             border_radius="14px",
@@ -272,7 +279,7 @@ def producto_form() -> rx.Component:
                 rx.button(
                     "Nuevo",
                     on_click=RestaurantState.nuevo_producto,
-                    background="rgba(255,255,255,0.05)",
+                    background=SURFACE_GHOST,
                     color=TEXT_PRIMARY,
                     border=f"1px solid {BORDER_COLOR}",
                     border_radius="16px",
@@ -290,7 +297,7 @@ def producto_form() -> rx.Component:
                     value=RestaurantState.producto_form_categoria_nombre,
                     on_change=RestaurantState.set_producto_form_categoria_nombre,
                     width="100%",
-                    style={"background": "rgba(255,255,255,0.04)"},
+                    style={"background": SURFACE_ELEVATED},
                     color=TEXT_PRIMARY,
                 ),
                 rx.box(
@@ -298,8 +305,8 @@ def producto_form() -> rx.Component:
                     width="100%",
                     padding="0.9rem 1rem",
                     border_radius="16px",
-                    style={"background": "rgba(239, 68, 68, 0.12)"},
-                    color="#FCA5A5",
+                    style={"background": DANGER_BG},
+                    color=DANGER_TEXT,
                 ),
             ),
             form_label("Nombre"),
@@ -355,7 +362,7 @@ def producto_row(producto: ProductoView) -> rx.Component:
                         producto.categoria_nombre,
                         padding="0.25rem 0.65rem",
                         border_radius="999px",
-                        style={"background": "rgba(255,255,255,0.05)"},
+                        style={"background": SURFACE_GHOST},
                         color=TEXT_MUTED,
                         font_size="0.75rem",
                         font_weight="700",
@@ -367,11 +374,11 @@ def producto_row(producto: ProductoView) -> rx.Component:
                         style={
                             "background": rx.cond(
                                 producto.disponible,
-                                "rgba(34, 197, 94, 0.16)",
-                                "rgba(148, 163, 184, 0.14)",
+                                SUCCESS_BG,
+                                SURFACE_GHOST,
                             )
                         },
-                        color=rx.cond(producto.disponible, "#BBF7D0", TEXT_MUTED),
+                        color=rx.cond(producto.disponible, SUCCESS_TEXT, TEXT_MUTED),
                         font_weight="700",
                         font_size="0.75rem",
                     ),
@@ -388,7 +395,7 @@ def producto_row(producto: ProductoView) -> rx.Component:
                 rx.button(
                     "Editar",
                     on_click=RestaurantState.editar_producto(producto.id),
-                    background="rgba(255,255,255,0.05)",
+                    background=SURFACE_GHOST,
                     color=TEXT_PRIMARY,
                     border=f"1px solid {BORDER_COLOR}",
                     border_radius="14px",
@@ -398,10 +405,10 @@ def producto_row(producto: ProductoView) -> rx.Component:
                     on_click=RestaurantState.toggle_producto_disponible(producto.id),
                     background=rx.cond(
                         producto.disponible,
-                        "rgba(239, 68, 68, 0.14)",
-                        "rgba(34, 197, 94, 0.14)",
+                        DANGER_BG,
+                        SUCCESS_BG,
                     ),
-                    color=rx.cond(producto.disponible, "#FCA5A5", "#BBF7D0"),
+                    color=rx.cond(producto.disponible, DANGER_TEXT, SUCCESS_TEXT),
                     border=f"1px solid {BORDER_COLOR}",
                     border_radius="14px",
                     font_weight="700",
@@ -417,7 +424,7 @@ def producto_row(producto: ProductoView) -> rx.Component:
         width="100%",
         padding="1rem",
         border_radius="22px",
-        style={"background": "rgba(255,255,255,0.03)"},
+        style={"background": SURFACE_MUTED},
         border=f"1px solid {BORDER_COLOR}",
     )
 

@@ -7,8 +7,12 @@ import reflex as rx
 from Restaurante.state.app_state import HistorialItem, MesaView, RestaurantState
 from Restaurante.views.shared import (
     ACCENT,
+    ACCENT_BG,
     ACCENT_HOVER,
+    BORDER_ACCENT,
     BORDER_COLOR,
+    SURFACE_GHOST,
+    SURFACE_MUTED,
     TEXT_MUTED,
     TEXT_PRIMARY,
     TEXT_SECONDARY,
@@ -44,23 +48,23 @@ def mesa_row(mesa: MesaView) -> rx.Component:
                 background=rx.cond(
                     RestaurantState.mesa_seleccionada_id == mesa.id,
                     ACCENT,
-                    "rgba(255,255,255,0.05)",
+                    SURFACE_GHOST,
                 ),
                 color=TEXT_PRIMARY,
                 border=rx.cond(
                     RestaurantState.mesa_seleccionada_id == mesa.id,
-                    "1px solid rgba(249, 115, 22, 0.34)",
+                    f"1px solid {BORDER_ACCENT}",
                     f"1px solid {BORDER_COLOR}",
                 ),
                 border_radius="14px",
                 font_weight="700",
-                _hover={"background": "rgba(249, 115, 22, 0.18)"},
+                _hover={"background": ACCENT_BG},
             )
         ),
         style={
             "background": rx.cond(
                 RestaurantState.mesa_seleccionada_id == mesa.id,
-                "rgba(249, 115, 22, 0.08)",
+                ACCENT_BG,
                 "transparent",
             )
         },
@@ -115,7 +119,7 @@ def mesas_table() -> rx.Component:
                     overflow_x="auto",
                     padding="0.2rem",
                     border_radius="22px",
-                    style={"background": "rgba(255,255,255,0.03)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px solid {BORDER_COLOR}",
                 ),
                 rx.box(
@@ -134,7 +138,7 @@ def mesas_table() -> rx.Component:
                     width="100%",
                     padding="3rem 1.25rem",
                     border_radius="24px",
-                    style={"background": "rgba(255,255,255,0.03)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px dashed {BORDER_COLOR}",
                 ),
             ),
@@ -214,7 +218,7 @@ def cuenta_panel() -> rx.Component:
                 width="100%",
                 padding="1rem",
                 border_radius="20px",
-                style={"background": "rgba(255,255,255,0.04)"},
+                style={"background": SURFACE_GHOST},
                 border=f"1px solid {BORDER_COLOR}",
             ),
             rx.box(
@@ -242,11 +246,10 @@ def cuenta_panel() -> rx.Component:
                 border_radius="24px",
                 style={
                     "background": (
-                        "linear-gradient(135deg, rgba(249, 115, 22, 0.18) 0%, "
-                        "rgba(249, 115, 22, 0.06) 100%)"
+                        "linear-gradient(135deg, #3D1A06 0%, #1E0D03 100%)"
                     )
                 },
-                border="1px solid rgba(249, 115, 22, 0.22)",
+                border=f"1px solid {BORDER_ACCENT}",
             ),
             rx.cond(
                 RestaurantState.hay_historial_pedido,
@@ -271,7 +274,7 @@ def cuenta_panel() -> rx.Component:
                     overflow_x="auto",
                     padding="0.2rem",
                     border_radius="22px",
-                    style={"background": "rgba(255,255,255,0.03)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px solid {BORDER_COLOR}",
                 ),
                 rx.box(
@@ -279,7 +282,7 @@ def cuenta_panel() -> rx.Component:
                     width="100%",
                     padding="1.2rem",
                     border_radius="20px",
-                    style={"background": "rgba(255,255,255,0.03)"},
+                    style={"background": SURFACE_MUTED},
                     border=f"1px dashed {BORDER_COLOR}",
                     color=TEXT_MUTED,
                     text_align="center",

@@ -1,0 +1,5 @@
+
+reflex==0.8.27
+sqlmodel==0.0.37
+python-escpos>=3.1,<4
+pyusb>=1.2.1
